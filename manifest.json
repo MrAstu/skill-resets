@@ -1,0 +1,13 @@
+{
+    "files": {
+        "index.js": "823a1998452cdde63c80c83879a5bda65d51c8f4077559b3fbc2994906f08fd8",
+        "module.json": "75c00f0dd18778f3d281cb499f0585ec7607ce4178b4f40e72b61dcbdbc8d53c",
+        "config.json": {"overwrite": false, "hash": "77d403961d2292a74069f5f1f91f9c181d2295a8a5f7ef6f37d5ceb61d861ea1"}
+    },
+    "defs": {
+        "C_CHECK_VERSION": 1,
+        "S_LOGIN": [9, 10],
+        "S_DUNGEON_EVENT_MESSAGE": 1,
+        "S_CREST_MESSAGE": 2
+    }
+}

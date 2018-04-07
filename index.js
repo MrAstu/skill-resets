@@ -1,12 +1,10 @@
-const SHOW_SYSTEM_RESET_MESSAGE = false
-const RESET_FONT_COLOR = '#FF4500' // https://www.google.com/search?q=colour+picker
-const FLASHING_NOTIFICATION = false
+const { show_system_reset_message: SHOW_SYSTEM_RESET_MESSAGE, reset_font_color: RESET_FONT_COLOR, flashing_notification: FLASHING_NOTIFICATION } = require('./config.json')
 
-module.exports = function SkillResets (dispatch) {
+function SkillResets(dispatch) {
   let model = null
 
-  dispatch.hook('S_LOGIN', 9, event => {
-    ({ templateId: model } = event)
+  dispatch.hook('S_LOGIN', (dispatch.base.majorPatchVersion >= 67) ? 10 : 9, event => {
+    model = event.templateId
   })
 
   const showMessage = message => {
@@ -18,16 +16,24 @@ module.exports = function SkillResets (dispatch) {
     })
   }
 
-  dispatch.hook('S_CREST_MESSAGE', 1, ({ type, skillID }) => {
+  dispatch.hook('S_CREST_MESSAGE', 2, ({ type, skill }) => {
     if (type === 6) {
       showMessage(
         `<img src="img://skill__0__${model}__${
-          skillID
+          skill
         }" width="48" height="48" vspace="-20"/><font size="24" color="${
           RESET_FONT_COLOR
         }">&nbsp;Reset</font>`
       )
-      if (!SHOW_SYSTEM_RESET_MESSAGE) return false
+      if (!SHOW_SYSTEM_RESET_MESSAGE)
+        return false
     }
   })
+}
+
+module.exports = function SkillResetsWrapper(dispatch) {
+  if(!dispatch.base.protocolVersion)
+    dispatch.hook('C_CHECK_VERSION', 1, (event) => { SkillResets(dispatch); })
+  else
+    SkillResets(dispatch)
 }
