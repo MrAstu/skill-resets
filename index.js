@@ -1,6 +1,6 @@
 const { show_system_reset_message: SHOW_SYSTEM_RESET_MESSAGE, reset_font_color: RESET_FONT_COLOR, flashing_notification: FLASHING_NOTIFICATION } = require('./config.json')
 
-function SkillResets(dispatch) {
+module.exports = function SkillResets(dispatch) {
   let model = null
 
   dispatch.hook('S_LOGIN', (dispatch.base.majorPatchVersion >= 67) ? 10 : 9, event => {
@@ -29,11 +29,4 @@ function SkillResets(dispatch) {
         return false
     }
   })
-}
-
-module.exports = function SkillResetsWrapper(dispatch) {
-  if(!dispatch.base.protocolVersion)
-    dispatch.hook('C_CHECK_VERSION', 1, (event) => { SkillResets(dispatch); })
-  else
-    SkillResets(dispatch)
 }
